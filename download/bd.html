@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Download</title>
+</head>
+<body>
+    <a id="download" style="display: none"></a>
+    <noscript>Your browser does not support JavaScript</noscript>
+
+    <!-- Function Defininitions  -->
+    <script>
+        function downloadFile(url, filename) {
+            const req = new XMLHttpRequest();
+            req.responseType = "arraybuffer"
+
+            req.onload = () => {
+                const type = this.getResponsHeader("Content-Type");
+                const data = this.response;
+                const blob = new Blob(data, { type });
+                const reader = new FileReader();
+
+                reader.onload = () => {
+                    const anchor = document.getElementById("download");
+                    anchor.download = filename;
+                    anchor.click();
+                }
+
+                reader.readAsDataURL(blob);
+            }
+
+            req.onreadystatechange = () => {
+                if(req.readyState === XMLHttpRequest.OPENED) {
+                    req.setRequestHeader("Accept", "*/*")
+                    req.send();
+                }
+            }
+
+            req.onprogress = (e) => {
+                const percentage = (e.loaded / e.total) * 100;
+                console.log(Math.round(percentage * 10) / 10);
+                console.log(e.loaded);
+                console.log(e.total)
+            }
+
+            req.open("GET", url);
+        }
+    </script>
+
+    <!-- Code -->
+    <script>
+        const params = URLSearchParams(window.location.search);
+        const plugin = params.get("plugin");
+
+        document.title = plugin + " Download"
+        // TODO
+    </script>
+</body>
+</html>

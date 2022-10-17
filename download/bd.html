@@ -15,7 +15,7 @@
             req.responseType = "arraybuffer"
 
             req.onload = () => {
-                const type = this.getResponsHeader("Content-Type");
+                const type = this.getResponseHeader("Content-Type");
                 const data = this.response;
                 const blob = new Blob(data, { type });
                 const reader = new FileReader();
@@ -49,7 +49,7 @@
 
     <!-- Code -->
     <script>
-        const params = URLSearchParams(window.location.search);
+        const params = new URLSearchParams(window.location.search);
         const plugin = params.get("plugin");
 
         document.title = plugin + " Download"
